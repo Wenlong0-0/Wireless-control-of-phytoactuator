@@ -3,23 +3,30 @@
 #include <ESP8266WiFi.h>
 #include <BlynkSimpleEsp8266.h>
 
+char auth[] = "Your token";
 
-char auth[] = "9c0dfcc91139447eb8ab9852bad2ae01";
-
-// Your WiFi credentials.
-// Set password to "" for open networks.
-char ssid[] = "Your WiFi ID";
+char ssid[] = "Your WiFi name";
 char pass[] = "Your WiFi password";
+
+const int PowerOut = 4;
 
 void setup()
 {
-  // Debug console
   Serial.begin(9600);
+  pinMode(PowerOut, OUTPUT);
 
   Blynk.begin(auth, ssid, pass);
 }
+
 void loop()
 {
   Blynk.run();
-  
+  float analogValue = analogRead(A0);
+  Serial.println(analogValue);
+  if (analogValue > 900){
+    digitalWrite(PowerOut, HIGH);
+    delay(500);
+    digitalWrite(PowerOut, LOW);
+    delay(500);
+  }
 }
